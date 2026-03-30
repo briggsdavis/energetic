@@ -431,7 +431,7 @@ export default function App() {
       id: 3,
       name: "100% Leather Biker Motorcycle Jacket for Men",
       category: "Men's Jackets",
-      image: "https://images.unsplash.com/photo-1520975916090-3105956dac50?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/leather-moto/800/1000",
       price: "$349.00",
       rating: 5,
       sku: "MJ-MOTOR-003",
@@ -449,7 +449,7 @@ export default function App() {
       id: 4,
       name: "Black & White Shearling Leather Bomber Jacket for Women",
       category: "Women's Jackets",
-      image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/shearling-jacket/800/1000",
       price: "$399.00",
       rating: 5,
       sku: "WJ-BOMBER-004",
@@ -467,7 +467,7 @@ export default function App() {
       id: 5,
       name: "Brown Shearling Leather Bomber Jacket for Women – Fur Lined",
       category: "Women's Jackets",
-      image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/brown-bomber/800/1000",
       price: "$379.00",
       rating: 5,
       sku: "WJ-BOMBER-005",
@@ -485,7 +485,7 @@ export default function App() {
       id: 6,
       name: "Premium Leather Travel Duffle Bag",
       category: "Leather Bags",
-      image: "https://images.unsplash.com/photo-1547949003-9792a18a2601?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/duffle-bag/800/1000",
       price: "$349.00",
       rating: 5,
       sku: "ACC-BAG-006",
@@ -503,7 +503,7 @@ export default function App() {
       id: 7,
       name: "Handcrafted Leather Messenger Bag",
       category: "Leather Bags",
-      image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/messenger-bag/800/1000",
       price: "$189.00",
       rating: 5,
       sku: "ACC-BAG-007",
@@ -521,7 +521,7 @@ export default function App() {
       id: 8,
       name: "Elite Leather Driving Gloves",
       category: "Leather Gloves & Mittens",
-      image: "https://images.unsplash.com/photo-1542332606-b3d2706eb06a?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/drv-gloves/800/1000",
       price: "$79.00",
       rating: 5,
       sku: "ACC-GLV-008",
@@ -539,7 +539,7 @@ export default function App() {
       id: 9,
       name: "Shearling Lined Leather Mittens",
       category: "Leather Gloves & Mittens",
-      image: "https://images.unsplash.com/photo-1605902711622-cfb43c443ffb?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/leather-mittens/800/1000",
       price: "$95.00",
       rating: 5,
       sku: "ACC-GLV-009",
@@ -556,7 +556,7 @@ export default function App() {
       id: 10,
       name: "Classic Full Grain Leather Belt",
       category: "Belts & Wallets",
-      image: "https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/leather-belt/800/1000",
       price: "$55.00",
       rating: 5,
       sku: "ACC-BLT-010",
@@ -573,7 +573,7 @@ export default function App() {
       id: 11,
       name: "Slim Bifold Leather Wallet",
       category: "Belts & Wallets",
-      image: "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/slim-wallet/800/1000",
       price: "$45.00",
       rating: 5,
       sku: "ACC-WLT-011",
@@ -590,7 +590,7 @@ export default function App() {
       id: 12,
       name: "Women's Slim Fit Leather Blazer",
       category: "Women's Jackets",
-      image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/womens-blazer/800/1000",
       price: "$289.00",
       rating: 5,
       sku: "WJ-BLAZER-012",
@@ -649,7 +649,7 @@ export default function App() {
       excerpt: "Discover the secrets behind our rigorous 5-stage inspection protocol and how we source the finest hides.",
       date: "March 15, 2026",
       author: "Zain Ahmed",
-      image: "https://images.unsplash.com/photo-1520975916090-3105956dac50?auto=format&fit=crop&q=80&w=600",
+      image: "https://picsum.photos/seed/leather-moto/600/400",
       category: "Craftsmanship"
     },
     {
@@ -676,7 +676,7 @@ export default function App() {
       excerpt: "Why offering bespoke leather options is the key to customer loyalty in the modern fashion landscape.",
       date: "February 28, 2026",
       author: "Zain Ahmed",
-      image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=600",
+      image: "https://picsum.photos/seed/shearling-jacket/600/400",
       category: "Business"
     },
     {
@@ -685,7 +685,7 @@ export default function App() {
       excerpt: "Understanding the chemical processes that turn raw hides into durable, beautiful leather garments.",
       date: "February 20, 2026",
       author: "Hamza Ahmed",
-      image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&q=80&w=600",
+      image: "https://picsum.photos/seed/brown-bomber/600/400",
       category: "Craftsmanship"
     },
     {
@@ -712,7 +712,7 @@ export default function App() {
       excerpt: "Exploring the shift towards clean lines and understated luxury in contemporary leatherwear collections.",
       date: "February 05, 2026",
       author: "Hamza Ahmed",
-      image: "https://images.unsplash.com/photo-1520975916090-3105956dac50?auto=format&fit=crop&q=80&w=600",
+      image: "https://picsum.photos/seed/leather-moto/600/400",
       category: "Trends"
     },
     {
@@ -721,7 +721,7 @@ export default function App() {
       excerpt: "How our low MOQ and sampling services help emerging brands enter the premium leather market.",
       date: "January 30, 2026",
       author: "Bilal Ahmed",
-      image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=600",
+      image: "https://picsum.photos/seed/shearling-jacket/600/400",
       category: "Business"
     },
     {
@@ -730,7 +730,7 @@ export default function App() {
       excerpt: "From military utility to cultural rebellion: tracing the evolution of the world's most famous leather garment.",
       date: "January 25, 2026",
       author: "Zain Ahmed",
-      image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&q=80&w=600",
+      image: "https://picsum.photos/seed/brown-bomber/600/400",
       category: "Craftsmanship"
     }
   ];
@@ -1230,7 +1230,7 @@ export default function App() {
             >
               <div className="relative aspect-square rounded-none overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1520975916090-3105956dac50?auto=format&fit=crop&q=80&w=1000"
+                  src="https://picsum.photos/seed/leather-moto/800/1000"
                   alt="Craftsmanship"
                   className="w-full h-full object-cover transition-all duration-1000"
                   referrerPolicy="no-referrer"
@@ -1602,12 +1602,12 @@ export default function App() {
                 {[
                   "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80&w=600",
                   "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?auto=format&fit=crop&q=80&w=600",
-                  "https://images.unsplash.com/photo-1520975916090-3105956dac50?auto=format&fit=crop&q=80&w=600",
-                  "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=600",
-                  "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&q=80&w=600",
+                  "https://picsum.photos/seed/leather-moto/600/400",
+                  "https://picsum.photos/seed/shearling-jacket/600/400",
+                  "https://picsum.photos/seed/brown-bomber/600/400",
                   "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?auto=format&fit=crop&q=80&w=600",
                   "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80&w=600",
-                  "https://images.unsplash.com/photo-1520975916090-3105956dac50?auto=format&fit=crop&q=80&w=600"
+                  "https://picsum.photos/seed/leather-moto/600/400"
                 ].map((img, i) => (
                   <motion.div
                     key={i}

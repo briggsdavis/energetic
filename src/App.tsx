@@ -181,8 +181,20 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="text-xl font-medium mb-8">
+              <div className="text-xl font-medium mb-6">
                 {product.price}
+              </div>
+
+              {/* Wholesale Utility Bar */}
+              <div className="grid grid-cols-2 gap-4 mb-8 p-5 bg-gray-50 border border-gray-100">
+                <div>
+                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-gray-400 block mb-1">Min. Order Qty</span>
+                  <span className="text-sm font-bold text-black">{product.moq}</span>
+                </div>
+                <div>
+                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-gray-400 block mb-1">Production Lead Time</span>
+                  <span className="text-sm font-bold text-black">{product.leadTime}</span>
+                </div>
               </div>
 
               <div className="mb-12">
@@ -197,13 +209,24 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="flex gap-4 mb-12">
-                <button className="flex-1 bg-black text-white py-5 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-900 transition-colors">
-                  Add to Inquiry
-                </button>
-                <button className="flex-1 border border-black text-black py-5 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">
-                  Custom Order
-                </button>
+              <div className="flex flex-col gap-3 mb-12">
+                <a
+                  href={`https://wa.me/923001234567?text=Hi%2C%20I%27m%20interested%20in%20a%20wholesale%20quote%20for%3A%20${encodeURIComponent(product.name)}%20(SKU%3A%20${product.sku})`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-[#25D366] text-white py-5 text-[10px] font-bold uppercase tracking-widest hover:bg-[#1ebe5d] transition-colors flex items-center justify-center gap-3"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  Request Quote via WhatsApp
+                </a>
+                <div className="flex gap-3">
+                  <button className="flex-1 bg-black text-white py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-900 transition-colors">
+                    Request Sample
+                  </button>
+                  <button className="flex-1 border border-black text-black py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">
+                    Custom Order
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-12 mb-16">
@@ -407,6 +430,8 @@ export default function App() {
       attributes: "Slim Fit, Mid-Weight, Weather Resistant",
       tags: ["Biker", "Men's Fashion", "Genuine Leather", "Handcrafted"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "50 units",
+      leadTime: "18–22 days",
       isNewArrival: true
     },
     {
@@ -423,6 +448,8 @@ export default function App() {
       attributes: "Regular Fit, Heavy-Weight, Classic Style",
       tags: ["Varsity", "Hybrid", "College Style", "Premium"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "50 units",
+      leadTime: "20–25 days",
       isNewArrival: true
     },
     {
@@ -439,6 +466,8 @@ export default function App() {
       attributes: "Regular Fit, Heavy-Weight, Protective",
       tags: ["Motorcycle", "Road Ready", "Classic Biker", "Heavy Duty"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "30 units",
+      leadTime: "22–28 days",
       isNewArrival: true
     },
     {
@@ -455,6 +484,8 @@ export default function App() {
       attributes: "Oversized Fit, Ultra-Warm, Luxury",
       tags: ["Shearling", "Winter", "Bomber", "High Fashion"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "25 units",
+      leadTime: "25–30 days",
       isNewArrival: true
     },
     {
@@ -471,6 +502,8 @@ export default function App() {
       attributes: "Regular Fit, Warm, Vintage Look",
       tags: ["Aviator", "Brown Leather", "Cozy", "Women's Style"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "25 units",
+      leadTime: "25–30 days",
       isNewArrival: true
     },
     {
@@ -487,6 +520,8 @@ export default function App() {
       attributes: "Large Capacity, Durable, Travel Ready",
       tags: ["Travel", "Duffle", "Weekend Bag", "Luxury Travel"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "50 units",
+      leadTime: "15–20 days",
       isNewArrival: true
     },
     {
@@ -503,6 +538,8 @@ export default function App() {
       attributes: "Professional, Slim, Tech Friendly",
       tags: ["Office", "Messenger", "Laptop Bag", "Daily Carry"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "100 units",
+      leadTime: "14–18 days",
       isNewArrival: true
     },
     {
@@ -519,6 +556,8 @@ export default function App() {
       attributes: "Breathable, Lightweight, High Grip",
       tags: ["Driving", "Gloves", "Racing", "Accessories"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "100 units",
+      leadTime: "12–16 days",
       isNewArrival: true
     },
     {
@@ -534,7 +573,9 @@ export default function App() {
       features: ["Extra Long Cuff", "Natural Insulation", "Soft Texture", "Hand-stitched Details"],
       attributes: "Ultra-Warm, Soft, Winter Essential",
       tags: ["Winter", "Mittens", "Shearling", "Cold Weather"],
-      colors: ["Black", "Brown", "Custom"]
+      colors: ["Black", "Brown", "Custom"],
+      moq: "100 units",
+      leadTime: "14–18 days"
     },
     {
       id: 10,
@@ -549,7 +590,9 @@ export default function App() {
       features: ["Hand-burnished Edges", "Five Adjustment Holes", "Removable Buckle", "Lifetime Warranty"],
       attributes: "Durable, Classic, Versatile",
       tags: ["Belt", "Classic", "Everyday", "Full Grain"],
-      colors: ["Black", "Brown", "Custom"]
+      colors: ["Black", "Brown", "Custom"],
+      moq: "200 units",
+      leadTime: "10–14 days"
     },
     {
       id: 11,
@@ -564,7 +607,9 @@ export default function App() {
       features: ["6 Card Slots", "Bill Compartment", "2 Hidden Pockets", "Ultra-Slim Design"],
       attributes: "Minimalist, RFID Protected, Slim",
       tags: ["Wallet", "Minimalist", "Slim", "Daily Carry"],
-      colors: ["Black", "Brown", "Custom"]
+      colors: ["Black", "Brown", "Custom"],
+      moq: "200 units",
+      leadTime: "10–14 days"
     },
     {
       id: 12,
@@ -579,24 +624,38 @@ export default function App() {
       features: ["Flap Pockets", "Internal Shoulder Pads", "Satin Lining", "Tailored Silhouette"],
       attributes: "Slim Fit, Lightweight, Professional",
       tags: ["Blazer", "Office Wear", "Chic", "Nappa Leather"],
-      colors: ["Black", "Brown", "Custom"]
+      colors: ["Black", "Brown", "Custom"],
+      moq: "30 units",
+      leadTime: "20–25 days"
     }
   ];
 
   const testimonials = [
     {
-      name: "Julie Jack",
-      text: "I highly recommend Energetic Wears. Their product is amazing and their service is great. I certainly would recommend them.",
+      name: "James Whitfield",
+      role: "Head of Procurement",
+      company: "Apex Outerwear Co.",
+      country: "United States",
+      volume: "800 units / season",
+      text: "We've placed three consecutive seasonal orders totalling over 800 units. Lead times are consistently 22 days and the QC documentation matches every shipment exactly. Energetic is now our primary Sialkot supplier.",
       rating: 5
     },
     {
-      name: "Tracy Middleton",
-      text: "The product is top quality. The jacket and material is beautiful, with a stylishly unique elegance and mixture of roughed ease that makes for versatile wear. Definitely one of my better coat/ jackets.",
+      name: "Sophie Leclercq",
+      role: "Buying Director",
+      company: "Maison Nord Retail Group",
+      country: "France",
+      volume: "500+ units / order",
+      text: "The REACH compliance and third-party inspection reports gave us complete confidence for our EU market. Sampling took 10 days, bulk production 24 days. Quality is indistinguishable from our previous supplier at twice the price.",
       rating: 5
     },
     {
-      name: "Carolyn Pledger",
-      text: "Absolutely stunning. A perfect surprise for a hard working man. Excellent quality and even richer and more luxurious than expected. Exceeded my expectations! So delighted I picked your company!",
+      name: "Marcus Thornton",
+      role: "Brand Founder",
+      company: "Thornton & Co. Leather",
+      country: "United Kingdom",
+      volume: "200 units (startup MOQ)",
+      text: "Starting a leather brand is daunting, but Energetic's low MOQ and dedicated sampling process made it viable. Our first 200-unit run sold out in 6 weeks. We're now scaling to 600 units for the next drop.",
       rating: 5
     }
   ];
@@ -704,8 +763,28 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-black selection:text-white overflow-x-hidden">
       <div className="fixed top-0 left-0 right-0 z-[100] pointer-events-none">
+        {/* Announcement Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.5 }}
+          className="bg-black text-white text-center py-2 px-4 pointer-events-auto"
+        >
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em]">
+            Free Samples Available &nbsp;·&nbsp; We Reply Within 2 Hours &nbsp;·&nbsp;
+            <a
+              href="https://wa.me/923001234567?text=Hi%2C%20please%20send%20me%20your%20wholesale%20catalog"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-gray-300 transition-colors ml-1"
+            >
+              WhatsApp Us Now
+            </a>
+          </p>
+        </motion.div>
+
         {/* Top Header */}
-        <motion.header 
+        <motion.header
           initial={{ opacity: 0, y: -100 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 2 }}
@@ -885,26 +964,39 @@ export default function App() {
                   className="max-w-4xl"
                 >
                   <span className="inline-block px-4 py-1.5 rounded-none bg-white text-black text-[10px] font-bold tracking-[0.3em] uppercase mb-8">
-                    B2B MANUFACTURING EXCELLENCE
+                    Sialkot, Punjab · Pakistan's Leather Capital
                   </span>
                   <h1 className="text-4xl md:text-7xl font-display font-bold leading-[0.9] tracking-tighter mb-10 uppercase text-white">
                     PREMIUM <br />
                     <span className="text-gray-400 italic">LEATHER</span> <br />
-                    CRAFTSMANSHIP
+                    MANUFACTURER
                   </h1>
-                  <p className="text-xl text-gray-300 mb-12 max-w-lg leading-relaxed font-light">
-                    Direct-from-factory wholesale manufacturing for global fashion brands. 
-                    Uncompromising quality, custom-tailored for your business needs.
+                  <p className="text-xl text-gray-300 mb-4 max-w-lg leading-relaxed font-light">
+                    OEM &amp; wholesale leather jackets, bags &amp; accessories — direct from our factory in Sialkot's export zone to your brand.
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-6">
-                    <motion.button 
+                  <p className="text-sm text-gray-500 mb-12 max-w-lg font-medium uppercase tracking-widest">
+                    Low MOQ · Custom Branding · ISO-Compliant · US / UK / EU Exports
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setCurrentPage('shop')}
-                      className="bg-white text-black px-12 py-6 rounded-none font-bold text-xs uppercase tracking-[0.3em] shadow-2xl transition-all"
+                      className="bg-white text-black px-10 py-5 rounded-none font-bold text-xs uppercase tracking-[0.3em] shadow-2xl transition-all"
                     >
                       Explore Collections
                     </motion.button>
+                    <motion.a
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      href="https://wa.me/923001234567?text=Hi%2C%20please%20send%20me%20your%20wholesale%20PDF%20catalog"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="border border-white text-white px-10 py-5 rounded-none font-bold text-xs uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all flex items-center justify-center gap-3"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                      Download PDF Catalog
+                    </motion.a>
                   </div>
                 </motion.div>
               </div>
@@ -934,6 +1026,35 @@ export default function App() {
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em]">{stat.label}</span>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Badges & Certifications Bar */}
+      <section className="py-12 bg-white border-b border-gray-100">
+        <div className="container mx-auto px-4">
+          <p className="text-center text-[10px] font-bold text-gray-400 uppercase tracking-[0.4em] mb-8">
+            Verified Manufacturer — Sialkot Export Processing Zone, Punjab, Pakistan
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
+            {[
+              { label: "ISO 9001:2015", sub: "Quality Management" },
+              { label: "REACH", sub: "EU Compliance" },
+              { label: "OEKO-TEX®", sub: "Tested for Harmful Substances" },
+              { label: "BSCI", sub: "Social Compliance Audit" },
+              { label: "OEM / ODM", sub: "Private Label Ready" },
+              { label: "Sialkot Chamber", sub: "Registered Exporter" },
+            ].map((cert) => (
+              <div key={cert.label} className="flex flex-col items-center text-center border border-gray-200 px-5 py-4 min-w-[110px] hover:border-black transition-colors group">
+                <span className="text-xs font-bold uppercase tracking-widest text-black group-hover:text-black transition-colors">{cert.label}</span>
+                <span className="text-[9px] text-gray-400 mt-1 uppercase tracking-wide">{cert.sub}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10 text-center">
+            <p className="text-[11px] text-gray-500 font-medium">
+              Exporting premium leather goods to <span className="font-bold text-black">USA · UK · EU · Canada · Australia</span> since 2011
+            </p>
           </div>
         </div>
       </section>
@@ -1237,12 +1358,16 @@ export default function App() {
                 <div className="absolute -top-6 left-12 w-12 h-12 bg-black text-white rounded-none flex items-center justify-center text-2xl font-serif italic shadow-xl">
                   "
                 </div>
-                <p className="text-gray-600 mb-10 italic leading-relaxed text-lg font-light">
-                  {t.text}
+                <p className="text-gray-600 mb-8 italic leading-relaxed text-base font-light">
+                  "{t.text}"
                 </p>
-                <div className="flex flex-col">
+                <div className="border-t border-gray-100 pt-6 space-y-1">
                   <h4 className="font-bold text-sm uppercase tracking-[0.2em]">{t.name}</h4>
-                  <span className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Verified Partner</span>
+                  <span className="text-[10px] text-gray-500 block">{t.role} — {t.company}</span>
+                  <div className="flex items-center justify-between pt-2">
+                    <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{t.country}</span>
+                    <span className="px-2 py-0.5 bg-black text-white text-[9px] font-bold uppercase tracking-widest">{t.volume}</span>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -1733,6 +1858,10 @@ export default function App() {
                                 ))}
                               </div>
                             </div>
+                            <div className="flex items-center gap-3 pt-1">
+                              <span className="px-2 py-0.5 bg-black text-white text-[9px] font-bold uppercase tracking-widest">MOQ: {product.moq}</span>
+                              <span className="text-[9px] text-gray-400 font-medium uppercase tracking-wide">{product.leadTime}</span>
+                            </div>
                           </div>
                         </motion.div>
                       ))}
@@ -2118,12 +2247,38 @@ export default function App() {
         </div>
       </footer>
 
+      {/* WhatsApp Floating Button */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 3 }}
+        className="fixed bottom-8 left-8 z-[150] flex flex-col items-start gap-2"
+      >
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 3.5 }}
+          className="bg-black text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 whitespace-nowrap shadow-lg"
+        >
+          Reply within 2 hours
+        </motion.div>
+        <a
+          href="https://wa.me/923001234567?text=Hi%2C%20I%27m%20interested%20in%20wholesale%20leather%20jackets.%20Can%20you%20share%20your%20catalog%3F"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-14 h-14 bg-[#25D366] text-white rounded-none shadow-2xl flex items-center justify-center hover:bg-[#1ebe5d] transition-colors"
+          aria-label="Chat on WhatsApp"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+      </motion.div>
+
       {/* Back to Top */}
       <AnimatePresence>
         {selectedProduct && (
-          <ProductDetail 
-            product={selectedProduct} 
-            onClose={() => setSelectedProduct(null)} 
+          <ProductDetail
+            product={selectedProduct}
+            onClose={() => setSelectedProduct(null)}
             onSelectProduct={(p) => setSelectedProduct(p)}
           />
         )}

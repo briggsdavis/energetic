@@ -132,6 +132,16 @@ export default function App() {
 
   const ProductDetail = ({ product, onClose, onSelectProduct }: { product: any, onClose: () => void, onSelectProduct: (p: any) => void }) => {
     const recommended = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 3);
+    const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+
+    const accordionItems = [
+      { key: 'specs', label: 'Product Specifications', content: <p className="text-xs text-gray-500 leading-relaxed">{product.specifications}</p> },
+      { key: 'features', label: 'Key Features', content: <ul className="list-disc list-inside text-xs text-gray-500 space-y-2">{product.features.map((f: string) => <li key={f}>{f}</li>)}</ul> },
+      { key: 'attributes', label: 'Attributes', content: <p className="text-xs text-gray-500 leading-relaxed">{product.attributes}</p> },
+      { key: 'measurements', label: 'Product Measurements', content: <div className="text-xs text-gray-500 space-y-1"><p>Standard fit based on international sizing charts.</p><p>Available in sizes: S, M, L, XL, XXL, XXXL.</p><p>Custom sizing available upon request.</p></div> },
+      { key: 'care', label: 'Composition, Care & Origin', content: <div className="text-xs text-gray-500 space-y-3"><div><p className="font-bold mb-1">COMPOSITION</p><p>Outer: 100% Genuine Leather</p><p>Lining: 100% Polyester / Cotton Blend</p></div><div><p className="font-bold mb-1">CARE</p><p>Do not wash. Do not bleach. Do not iron. Professional leather clean only.</p></div><div><p className="font-bold mb-1">ORIGIN</p><p>Handcrafted in Sialkot, Pakistan.</p></div></div> },
+      { key: 'shipping', label: 'Shipping, Exchanges and Returns', content: <div className="text-xs text-gray-500 space-y-1"><p>Free global shipping on orders over $500.</p><p>Standard delivery: 7–14 business days.</p><p>Returns accepted within 30 days of delivery.</p></div> },
+    ];
 
     return (
       <motion.div
@@ -143,26 +153,22 @@ export default function App() {
         className="fixed inset-0 z-[200] bg-white overflow-y-auto"
       >
         <div className="flex flex-col md:flex-row min-h-screen">
-          {/* Left: Image */}
-          <div className="md:w-3/5 bg-white relative overflow-hidden min-h-[60vh] md:min-h-screen">
+          {/* Left: Image — constrained to 40% so details panel has breathing room */}
+          <div className="md:w-2/5 bg-gray-50 relative overflow-hidden min-h-[50vh] md:min-h-screen md:sticky md:top-0 md:h-screen">
             <motion.img
               key={product.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              whileTap={{ scale: 1.5 }}
-              transition={{ 
-                opacity: { duration: 0.5 },
-                scale: { type: "spring", stiffness: 300, damping: 30 }
-              }}
+              transition={{ duration: 0.4 }}
               src={product.image}
               alt={product.name}
-              className="w-full h-full object-cover cursor-zoom-in origin-center"
+              className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
           </div>
 
           {/* Right: Details */}
-          <div className="md:w-2/5 p-8 md:p-24 flex flex-col">
+          <div className="md:w-3/5 p-8 md:p-16 flex flex-col">
             <div className="max-w-md">
               <div className="flex justify-between items-start mb-8">
                 <h1 className="text-2xl font-display font-bold uppercase tracking-tight leading-tight w-3/4">
@@ -220,10 +226,16 @@ export default function App() {
                   Request Quote via WhatsApp
                 </a>
                 <div className="flex gap-3">
-                  <button className="flex-1 bg-black text-white py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-900 transition-colors">
+                  <button
+                    onClick={() => { onClose(); setCurrentPage('contact'); }}
+                    className="flex-1 bg-black text-white py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-900 transition-colors"
+                  >
                     Request Sample
                   </button>
-                  <button className="flex-1 border border-black text-black py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">
+                  <button
+                    onClick={() => { onClose(); setCurrentPage('custom-leather-jackets'); }}
+                    className="flex-1 border border-black text-black py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+                  >
                     Custom Order
                   </button>
                 </div>
@@ -261,73 +273,36 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="space-y-4 pt-8 border-t border-gray-100">
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer list-none py-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Product Specifications</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
-                    </summary>
-                    <p className="text-xs text-gray-500 py-4 leading-relaxed">{product.specifications}</p>
-                  </details>
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer list-none py-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Key Features</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
-                    </summary>
-                    <ul className="list-disc list-inside text-xs text-gray-500 py-4 space-y-2">
-                      {product.features.map((f: string) => <li key={f}>{f}</li>)}
-                    </ul>
-                  </details>
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer list-none py-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Attributes</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
-                    </summary>
-                    <p className="text-xs text-gray-500 py-4 leading-relaxed">{product.attributes}</p>
-                  </details>
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer list-none py-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Product Measurements</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
-                    </summary>
-                    <div className="text-xs text-gray-500 py-4 space-y-2">
-                      <p>Standard fit based on international sizing charts.</p>
-                      <p>Available in sizes: S, M, L, XL, XXL, XXXL.</p>
-                      <p>Custom sizing available upon request.</p>
+                <div className="pt-8 border-t border-gray-100">
+                  {accordionItems.map((item) => (
+                    <div key={item.key} className="border-b border-gray-100">
+                      <button
+                        onClick={() => setOpenAccordion(openAccordion === item.key ? null : item.key)}
+                        className="w-full flex justify-between items-center py-4 text-left"
+                      >
+                        <span className="text-[10px] font-bold uppercase tracking-widest">{item.label}</span>
+                        <motion.div
+                          animate={{ rotate: openAccordion === item.key ? 90 : 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <ChevronRight size={14} />
+                        </motion.div>
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {openAccordion === item.key && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pb-4">{item.content}</div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
-                  </details>
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer list-none py-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Composition, Care & Origin</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
-                    </summary>
-                    <div className="text-xs text-gray-500 py-4 space-y-4">
-                      <div>
-                        <p className="font-bold mb-1">COMPOSITION</p>
-                        <p>Outer: 100% Genuine Leather</p>
-                        <p>Lining: 100% Polyester / Cotton Blend</p>
-                      </div>
-                      <div>
-                        <p className="font-bold mb-1">CARE</p>
-                        <p>Do not wash. Do not bleach. Do not iron. Professional leather clean only.</p>
-                      </div>
-                      <div>
-                        <p className="font-bold mb-1">ORIGIN</p>
-                        <p>Handcrafted in Sialkot, Pakistan.</p>
-                      </div>
-                    </div>
-                  </details>
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer list-none py-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Shipping, Exchanges and Returns</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
-                    </summary>
-                    <div className="text-xs text-gray-500 py-4 space-y-2">
-                      <p>Free global shipping on orders over $500.</p>
-                      <p>Standard delivery: 7-14 business days.</p>
-                      <p>Returns accepted within 30 days of delivery.</p>
-                    </div>
-                  </details>
+                  ))}
                 </div>
 
                 <div className="grid grid-cols-2 gap-8">
@@ -832,9 +807,10 @@ export default function App() {
                   </button>
                 ))}
               </nav>
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={() => setCurrentPage('contact')}
                 className="hidden sm:block bg-black text-white px-8 py-3 rounded-none text-[11px] font-bold tracking-[0.2em] uppercase hover:shadow-2xl hover:shadow-black/20 transition-all"
               >
                 GET STARTED
@@ -1734,7 +1710,179 @@ export default function App() {
       )}
 
       {currentPage === 'contact' && (
-        <ComingSoon title="Contact Us" />
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white min-h-screen">
+          {/* Contact Hero */}
+          <section className="py-20 bg-gray-50 border-b border-gray-100">
+            <div className="container mx-auto px-4">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.4em] mb-6 block">Direct Manufacturer</span>
+              <h1 className="text-5xl md:text-7xl font-display font-bold leading-none tracking-tighter uppercase mb-6">
+                GET IN <br /><span className="text-gray-300 italic">TOUCH</span>
+              </h1>
+              <p className="text-lg text-gray-500 max-w-xl font-light leading-relaxed">
+                Request a free sample, wholesale quote, or catalog. Our team responds within 2 business hours.
+              </p>
+            </div>
+          </section>
+
+          <section className="py-24">
+            <div className="container mx-auto px-4">
+              <div className="grid lg:grid-cols-2 gap-20">
+
+                {/* Left: Form */}
+                <div>
+                  <h2 className="text-xl font-bold uppercase tracking-tight mb-10">Send an Enquiry</h2>
+                  <form
+                    className="space-y-8"
+                    onSubmit={(e) => { e.preventDefault(); alert('Message sent! We\'ll reply within 2 hours.'); }}
+                  >
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Full Name *</label>
+                        <input type="text" required className="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition-colors bg-transparent text-sm" placeholder="John Smith" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Email Address *</label>
+                        <input type="email" required className="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition-colors bg-transparent text-sm" placeholder="john@yourbrand.com" />
+                      </div>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Company / Brand</label>
+                        <input type="text" className="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition-colors bg-transparent text-sm" placeholder="Your Brand Ltd." />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Country</label>
+                        <input type="text" className="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition-colors bg-transparent text-sm" placeholder="United States" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Enquiry Type</label>
+                      <select className="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition-colors bg-transparent text-sm">
+                        <option>Wholesale Quote</option>
+                        <option>Free Sample Request</option>
+                        <option>PDF Catalog Request</option>
+                        <option>OEM / Custom Order</option>
+                        <option>General Enquiry</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Message *</label>
+                      <textarea
+                        rows={5}
+                        required
+                        className="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition-colors resize-none bg-transparent text-sm"
+                        placeholder="Tell us about your product needs, quantities, target markets, and any custom requirements..."
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full bg-black text-white py-5 font-bold text-xs uppercase tracking-[0.3em] hover:bg-gray-900 transition-colors"
+                    >
+                      Send Enquiry
+                    </button>
+                    <p className="text-[10px] text-gray-400 text-center uppercase tracking-widest">
+                      We reply within 2 business hours · Mon–Sat, 9am–6pm PKT
+                    </p>
+                  </form>
+                </div>
+
+                {/* Right: Contact Details */}
+                <div className="space-y-10">
+                  <h2 className="text-xl font-bold uppercase tracking-tight">Contact Details</h2>
+
+                  <div className="space-y-8">
+                    <div className="flex gap-5">
+                      <div className="w-10 h-10 bg-black text-white flex items-center justify-center shrink-0">
+                        <MapPin size={18} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Factory Address</p>
+                        <p className="text-sm font-medium">Sialkot Export Processing Zone</p>
+                        <p className="text-sm text-gray-500">Sialkot, Punjab 51310, Pakistan</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-5">
+                      <div className="w-10 h-10 bg-black text-white flex items-center justify-center shrink-0">
+                        <Mail size={18} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Email</p>
+                        <a href="mailto:support@energeticwears.com" className="text-sm font-medium hover:underline">support@energeticwears.com</a>
+                      </div>
+                    </div>
+                    <div className="flex gap-5">
+                      <div className="w-10 h-10 bg-black text-white flex items-center justify-center shrink-0">
+                        <Phone size={18} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Phone / WhatsApp</p>
+                        <a href="tel:+923001234567" className="text-sm font-medium hover:underline">+92 300 1234567</a>
+                        <p className="text-xs text-gray-400 mt-0.5">Available Mon–Sat, 9am–6pm PKT</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-5">
+                      <div className="w-10 h-10 bg-[#25D366] text-white flex items-center justify-center shrink-0">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">WhatsApp Direct</p>
+                        <a
+                          href="https://wa.me/923001234567?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20wholesale%20leather%20products."
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-medium hover:underline"
+                        >
+                          Chat on WhatsApp
+                        </a>
+                        <p className="text-xs text-gray-400 mt-0.5">Fastest response — typically under 30 min</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-5">
+                      <div className="w-10 h-10 bg-black text-white flex items-center justify-center shrink-0">
+                        <Clock size={18} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Response Commitment</p>
+                        <p className="text-sm font-medium">All enquiries answered within 2 hours</p>
+                        <p className="text-xs text-gray-400 mt-0.5">Monday–Saturday · 9:00 AM – 6:00 PM PKT</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick action strip */}
+                  <div className="bg-black text-white p-8 space-y-4">
+                    <p className="text-xs font-bold uppercase tracking-widest text-gray-400">Quick Actions</p>
+                    <a
+                      href="https://wa.me/923001234567?text=Hi%2C%20please%20send%20me%20your%20wholesale%20PDF%20catalog"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between py-3 border-b border-white/10 hover:text-gray-300 transition-colors group"
+                    >
+                      <span className="text-sm font-medium">Download PDF Catalog</span>
+                      <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    </a>
+                    <a
+                      href="https://wa.me/923001234567?text=Hi%2C%20I%27d%20like%20to%20request%20a%20free%20sample"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between py-3 border-b border-white/10 hover:text-gray-300 transition-colors group"
+                    >
+                      <span className="text-sm font-medium">Request a Free Sample</span>
+                      <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    </a>
+                    <button
+                      onClick={() => setCurrentPage('custom-leather-jackets')}
+                      className="flex items-center justify-between py-3 w-full text-left hover:text-gray-300 transition-colors group"
+                    >
+                      <span className="text-sm font-medium">Start a Custom Order</span>
+                      <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </motion.div>
       )}
 
       {secondaryNavLinks.some(link => link.id === currentPage) && !['about', 'blogs', 'custom-leather-jackets', 'shop'].includes(currentPage) && (

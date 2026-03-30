@@ -936,7 +936,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <main className="pt-0">
+      <main className="pt-32 lg:pt-44">
         {currentPage === 'home' && (
           <>
             {/* Hero Section */}

@@ -132,6 +132,16 @@ export default function App() {
 
   const ProductDetail = ({ product, onClose, onSelectProduct }: { product: any, onClose: () => void, onSelectProduct: (p: any) => void }) => {
     const recommended = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 3);
+    const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+
+    const accordionItems = [
+      { key: 'specs', label: 'Product Specifications', content: <p className="text-xs text-gray-500 leading-relaxed">{product.specifications}</p> },
+      { key: 'features', label: 'Key Features', content: <ul className="list-disc list-inside text-xs text-gray-500 space-y-2">{product.features.map((f: string) => <li key={f}>{f}</li>)}</ul> },
+      { key: 'attributes', label: 'Attributes', content: <p className="text-xs text-gray-500 leading-relaxed">{product.attributes}</p> },
+      { key: 'measurements', label: 'Product Measurements', content: <div className="text-xs text-gray-500 space-y-1"><p>Standard fit based on international sizing charts.</p><p>Available in sizes: S, M, L, XL, XXL, XXXL.</p><p>Custom sizing available upon request.</p></div> },
+      { key: 'care', label: 'Composition, Care & Origin', content: <div className="text-xs text-gray-500 space-y-3"><div><p className="font-bold mb-1">COMPOSITION</p><p>Outer: 100% Genuine Leather</p><p>Lining: 100% Polyester / Cotton Blend</p></div><div><p className="font-bold mb-1">CARE</p><p>Do not wash. Do not bleach. Do not iron. Professional leather clean only.</p></div><div><p className="font-bold mb-1">ORIGIN</p><p>Handcrafted in Sialkot, Pakistan.</p></div></div> },
+      { key: 'shipping', label: 'Shipping, Exchanges and Returns', content: <div className="text-xs text-gray-500 space-y-1"><p>Free global shipping on orders over $500.</p><p>Standard delivery: 7–14 business days.</p><p>Returns accepted within 30 days of delivery.</p></div> },
+    ];
 
     return (
       <motion.div
@@ -143,26 +153,22 @@ export default function App() {
         className="fixed inset-0 z-[200] bg-white overflow-y-auto"
       >
         <div className="flex flex-col md:flex-row min-h-screen">
-          {/* Left: Image */}
-          <div className="md:w-3/5 bg-white relative overflow-hidden min-h-[60vh] md:min-h-screen">
+          {/* Left: Image — constrained to 40% so details panel has breathing room */}
+          <div className="md:w-2/5 bg-gray-50 relative overflow-hidden min-h-[50vh] md:min-h-screen md:sticky md:top-0 md:h-screen">
             <motion.img
               key={product.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              whileTap={{ scale: 1.5 }}
-              transition={{ 
-                opacity: { duration: 0.5 },
-                scale: { type: "spring", stiffness: 300, damping: 30 }
-              }}
+              transition={{ duration: 0.4 }}
               src={product.image}
               alt={product.name}
-              className="w-full h-full object-cover cursor-zoom-in origin-center"
+              className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
           </div>
 
           {/* Right: Details */}
-          <div className="md:w-2/5 p-8 md:p-24 flex flex-col">
+          <div className="md:w-3/5 p-8 md:p-16 flex flex-col">
             <div className="max-w-md">
               <div className="flex justify-between items-start mb-8">
                 <h1 className="text-2xl font-display font-bold uppercase tracking-tight leading-tight w-3/4">
@@ -181,8 +187,20 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="text-xl font-medium mb-8">
+              <div className="text-xl font-medium mb-6">
                 {product.price}
+              </div>
+
+              {/* Wholesale Utility Bar */}
+              <div className="grid grid-cols-2 gap-4 mb-8 p-5 bg-gray-50 border border-gray-100">
+                <div>
+                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-gray-400 block mb-1">Min. Order Qty</span>
+                  <span className="text-sm font-bold text-black">{product.moq}</span>
+                </div>
+                <div>
+                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-gray-400 block mb-1">Production Lead Time</span>
+                  <span className="text-sm font-bold text-black">{product.leadTime}</span>
+                </div>
               </div>
 
               <div className="mb-12">
@@ -197,13 +215,30 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="flex gap-4 mb-12">
-                <button className="flex-1 bg-black text-white py-5 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-900 transition-colors">
-                  Add to Inquiry
-                </button>
-                <button className="flex-1 border border-black text-black py-5 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">
-                  Custom Order
-                </button>
+              <div className="flex flex-col gap-3 mb-12">
+                <a
+                  href={`https://wa.me/923001234567?text=Hi%2C%20I%27m%20interested%20in%20a%20wholesale%20quote%20for%3A%20${encodeURIComponent(product.name)}%20(SKU%3A%20${product.sku})`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-[#25D366] text-white py-5 text-[10px] font-bold uppercase tracking-widest hover:bg-[#1ebe5d] transition-colors flex items-center justify-center gap-3"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  Request Quote via WhatsApp
+                </a>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => { onClose(); setCurrentPage('contact'); }}
+                    className="flex-1 bg-black text-white py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-900 transition-colors"
+                  >
+                    Request Sample
+                  </button>
+                  <button
+                    onClick={() => { onClose(); setCurrentPage('custom-leather-jackets'); }}
+                    className="flex-1 border border-black text-black py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+                  >
+                    Custom Order
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-12 mb-16">
@@ -238,73 +273,36 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="space-y-4 pt-8 border-t border-gray-100">
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer list-none py-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Product Specifications</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
-                    </summary>
-                    <p className="text-xs text-gray-500 py-4 leading-relaxed">{product.specifications}</p>
-                  </details>
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer list-none py-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Key Features</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
-                    </summary>
-                    <ul className="list-disc list-inside text-xs text-gray-500 py-4 space-y-2">
-                      {product.features.map((f: string) => <li key={f}>{f}</li>)}
-                    </ul>
-                  </details>
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer list-none py-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Attributes</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
-                    </summary>
-                    <p className="text-xs text-gray-500 py-4 leading-relaxed">{product.attributes}</p>
-                  </details>
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer list-none py-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Product Measurements</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
-                    </summary>
-                    <div className="text-xs text-gray-500 py-4 space-y-2">
-                      <p>Standard fit based on international sizing charts.</p>
-                      <p>Available in sizes: S, M, L, XL, XXL, XXXL.</p>
-                      <p>Custom sizing available upon request.</p>
+                <div className="pt-8 border-t border-gray-100">
+                  {accordionItems.map((item) => (
+                    <div key={item.key} className="border-b border-gray-100">
+                      <button
+                        onClick={() => setOpenAccordion(openAccordion === item.key ? null : item.key)}
+                        className="w-full flex justify-between items-center py-4 text-left"
+                      >
+                        <span className="text-[10px] font-bold uppercase tracking-widest">{item.label}</span>
+                        <motion.div
+                          animate={{ rotate: openAccordion === item.key ? 90 : 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <ChevronRight size={14} />
+                        </motion.div>
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {openAccordion === item.key && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pb-4">{item.content}</div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
-                  </details>
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer list-none py-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Composition, Care & Origin</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
-                    </summary>
-                    <div className="text-xs text-gray-500 py-4 space-y-4">
-                      <div>
-                        <p className="font-bold mb-1">COMPOSITION</p>
-                        <p>Outer: 100% Genuine Leather</p>
-                        <p>Lining: 100% Polyester / Cotton Blend</p>
-                      </div>
-                      <div>
-                        <p className="font-bold mb-1">CARE</p>
-                        <p>Do not wash. Do not bleach. Do not iron. Professional leather clean only.</p>
-                      </div>
-                      <div>
-                        <p className="font-bold mb-1">ORIGIN</p>
-                        <p>Handcrafted in Sialkot, Pakistan.</p>
-                      </div>
-                    </div>
-                  </details>
-                  <details className="group">
-                    <summary className="flex justify-between items-center cursor-pointer list-none py-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Shipping, Exchanges and Returns</span>
-                      <ChevronRight size={14} className="group-open:rotate-90 transition-transform" />
-                    </summary>
-                    <div className="text-xs text-gray-500 py-4 space-y-2">
-                      <p>Free global shipping on orders over $500.</p>
-                      <p>Standard delivery: 7-14 business days.</p>
-                      <p>Returns accepted within 30 days of delivery.</p>
-                    </div>
-                  </details>
+                  ))}
                 </div>
 
                 <div className="grid grid-cols-2 gap-8">
@@ -407,6 +405,8 @@ export default function App() {
       attributes: "Slim Fit, Mid-Weight, Weather Resistant",
       tags: ["Biker", "Men's Fashion", "Genuine Leather", "Handcrafted"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "50 units",
+      leadTime: "18–22 days",
       isNewArrival: true
     },
     {
@@ -423,13 +423,15 @@ export default function App() {
       attributes: "Regular Fit, Heavy-Weight, Classic Style",
       tags: ["Varsity", "Hybrid", "College Style", "Premium"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "50 units",
+      leadTime: "20–25 days",
       isNewArrival: true
     },
     {
       id: 3,
       name: "100% Leather Biker Motorcycle Jacket for Men",
       category: "Men's Jackets",
-      image: "https://images.unsplash.com/photo-1520975916090-3105956dac50?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/leather-moto/800/1000",
       price: "$349.00",
       rating: 5,
       sku: "MJ-MOTOR-003",
@@ -439,13 +441,15 @@ export default function App() {
       attributes: "Regular Fit, Heavy-Weight, Protective",
       tags: ["Motorcycle", "Road Ready", "Classic Biker", "Heavy Duty"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "30 units",
+      leadTime: "22–28 days",
       isNewArrival: true
     },
     {
       id: 4,
       name: "Black & White Shearling Leather Bomber Jacket for Women",
       category: "Women's Jackets",
-      image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/shearling-jacket/800/1000",
       price: "$399.00",
       rating: 5,
       sku: "WJ-BOMBER-004",
@@ -455,13 +459,15 @@ export default function App() {
       attributes: "Oversized Fit, Ultra-Warm, Luxury",
       tags: ["Shearling", "Winter", "Bomber", "High Fashion"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "25 units",
+      leadTime: "25–30 days",
       isNewArrival: true
     },
     {
       id: 5,
       name: "Brown Shearling Leather Bomber Jacket for Women – Fur Lined",
       category: "Women's Jackets",
-      image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/brown-bomber/800/1000",
       price: "$379.00",
       rating: 5,
       sku: "WJ-BOMBER-005",
@@ -471,13 +477,15 @@ export default function App() {
       attributes: "Regular Fit, Warm, Vintage Look",
       tags: ["Aviator", "Brown Leather", "Cozy", "Women's Style"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "25 units",
+      leadTime: "25–30 days",
       isNewArrival: true
     },
     {
       id: 6,
       name: "Premium Leather Travel Duffle Bag",
       category: "Leather Bags",
-      image: "https://images.unsplash.com/photo-1547949003-9792a18a2601?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/duffle-bag/800/1000",
       price: "$349.00",
       rating: 5,
       sku: "ACC-BAG-006",
@@ -487,13 +495,15 @@ export default function App() {
       attributes: "Large Capacity, Durable, Travel Ready",
       tags: ["Travel", "Duffle", "Weekend Bag", "Luxury Travel"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "50 units",
+      leadTime: "15–20 days",
       isNewArrival: true
     },
     {
       id: 7,
       name: "Handcrafted Leather Messenger Bag",
       category: "Leather Bags",
-      image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/messenger-bag/800/1000",
       price: "$189.00",
       rating: 5,
       sku: "ACC-BAG-007",
@@ -503,13 +513,15 @@ export default function App() {
       attributes: "Professional, Slim, Tech Friendly",
       tags: ["Office", "Messenger", "Laptop Bag", "Daily Carry"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "100 units",
+      leadTime: "14–18 days",
       isNewArrival: true
     },
     {
       id: 8,
       name: "Elite Leather Driving Gloves",
       category: "Leather Gloves & Mittens",
-      image: "https://images.unsplash.com/photo-1542332606-b3d2706eb06a?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/drv-gloves/800/1000",
       price: "$79.00",
       rating: 5,
       sku: "ACC-GLV-008",
@@ -519,13 +531,15 @@ export default function App() {
       attributes: "Breathable, Lightweight, High Grip",
       tags: ["Driving", "Gloves", "Racing", "Accessories"],
       colors: ["Black", "Brown", "Custom"],
+      moq: "100 units",
+      leadTime: "12–16 days",
       isNewArrival: true
     },
     {
       id: 9,
       name: "Shearling Lined Leather Mittens",
       category: "Leather Gloves & Mittens",
-      image: "https://images.unsplash.com/photo-1605902711622-cfb43c443ffb?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/leather-mittens/800/1000",
       price: "$95.00",
       rating: 5,
       sku: "ACC-GLV-009",
@@ -534,13 +548,15 @@ export default function App() {
       features: ["Extra Long Cuff", "Natural Insulation", "Soft Texture", "Hand-stitched Details"],
       attributes: "Ultra-Warm, Soft, Winter Essential",
       tags: ["Winter", "Mittens", "Shearling", "Cold Weather"],
-      colors: ["Black", "Brown", "Custom"]
+      colors: ["Black", "Brown", "Custom"],
+      moq: "100 units",
+      leadTime: "14–18 days"
     },
     {
       id: 10,
       name: "Classic Full Grain Leather Belt",
       category: "Belts & Wallets",
-      image: "https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/leather-belt/800/1000",
       price: "$55.00",
       rating: 5,
       sku: "ACC-BLT-010",
@@ -549,13 +565,15 @@ export default function App() {
       features: ["Hand-burnished Edges", "Five Adjustment Holes", "Removable Buckle", "Lifetime Warranty"],
       attributes: "Durable, Classic, Versatile",
       tags: ["Belt", "Classic", "Everyday", "Full Grain"],
-      colors: ["Black", "Brown", "Custom"]
+      colors: ["Black", "Brown", "Custom"],
+      moq: "200 units",
+      leadTime: "10–14 days"
     },
     {
       id: 11,
       name: "Slim Bifold Leather Wallet",
       category: "Belts & Wallets",
-      image: "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/slim-wallet/800/1000",
       price: "$45.00",
       rating: 5,
       sku: "ACC-WLT-011",
@@ -564,13 +582,15 @@ export default function App() {
       features: ["6 Card Slots", "Bill Compartment", "2 Hidden Pockets", "Ultra-Slim Design"],
       attributes: "Minimalist, RFID Protected, Slim",
       tags: ["Wallet", "Minimalist", "Slim", "Daily Carry"],
-      colors: ["Black", "Brown", "Custom"]
+      colors: ["Black", "Brown", "Custom"],
+      moq: "200 units",
+      leadTime: "10–14 days"
     },
     {
       id: 12,
       name: "Women's Slim Fit Leather Blazer",
       category: "Women's Jackets",
-      image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=1000",
+      image: "https://picsum.photos/seed/womens-blazer/800/1000",
       price: "$289.00",
       rating: 5,
       sku: "WJ-BLAZER-012",
@@ -579,24 +599,38 @@ export default function App() {
       features: ["Flap Pockets", "Internal Shoulder Pads", "Satin Lining", "Tailored Silhouette"],
       attributes: "Slim Fit, Lightweight, Professional",
       tags: ["Blazer", "Office Wear", "Chic", "Nappa Leather"],
-      colors: ["Black", "Brown", "Custom"]
+      colors: ["Black", "Brown", "Custom"],
+      moq: "30 units",
+      leadTime: "20–25 days"
     }
   ];
 
   const testimonials = [
     {
-      name: "Julie Jack",
-      text: "I highly recommend Energetic Wears. Their product is amazing and their service is great. I certainly would recommend them.",
+      name: "James Whitfield",
+      role: "Head of Procurement",
+      company: "Apex Outerwear Co.",
+      country: "United States",
+      volume: "800 units / season",
+      text: "We've placed three consecutive seasonal orders totalling over 800 units. Lead times are consistently 22 days and the QC documentation matches every shipment exactly. Energetic is now our primary Sialkot supplier.",
       rating: 5
     },
     {
-      name: "Tracy Middleton",
-      text: "The product is top quality. The jacket and material is beautiful, with a stylishly unique elegance and mixture of roughed ease that makes for versatile wear. Definitely one of my better coat/ jackets.",
+      name: "Sophie Leclercq",
+      role: "Buying Director",
+      company: "Maison Nord Retail Group",
+      country: "France",
+      volume: "500+ units / order",
+      text: "The REACH compliance and third-party inspection reports gave us complete confidence for our EU market. Sampling took 10 days, bulk production 24 days. Quality is indistinguishable from our previous supplier at twice the price.",
       rating: 5
     },
     {
-      name: "Carolyn Pledger",
-      text: "Absolutely stunning. A perfect surprise for a hard working man. Excellent quality and even richer and more luxurious than expected. Exceeded my expectations! So delighted I picked your company!",
+      name: "Marcus Thornton",
+      role: "Brand Founder",
+      company: "Thornton & Co. Leather",
+      country: "United Kingdom",
+      volume: "200 units (startup MOQ)",
+      text: "Starting a leather brand is daunting, but Energetic's low MOQ and dedicated sampling process made it viable. Our first 200-unit run sold out in 6 weeks. We're now scaling to 600 units for the next drop.",
       rating: 5
     }
   ];
@@ -615,7 +649,7 @@ export default function App() {
       excerpt: "Discover the secrets behind our rigorous 5-stage inspection protocol and how we source the finest hides.",
       date: "March 15, 2026",
       author: "Zain Ahmed",
-      image: "https://images.unsplash.com/photo-1520975916090-3105956dac50?auto=format&fit=crop&q=80&w=600",
+      image: "https://picsum.photos/seed/leather-moto/600/400",
       category: "Craftsmanship"
     },
     {
@@ -642,7 +676,7 @@ export default function App() {
       excerpt: "Why offering bespoke leather options is the key to customer loyalty in the modern fashion landscape.",
       date: "February 28, 2026",
       author: "Zain Ahmed",
-      image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=600",
+      image: "https://picsum.photos/seed/shearling-jacket/600/400",
       category: "Business"
     },
     {
@@ -651,7 +685,7 @@ export default function App() {
       excerpt: "Understanding the chemical processes that turn raw hides into durable, beautiful leather garments.",
       date: "February 20, 2026",
       author: "Hamza Ahmed",
-      image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&q=80&w=600",
+      image: "https://picsum.photos/seed/brown-bomber/600/400",
       category: "Craftsmanship"
     },
     {
@@ -678,7 +712,7 @@ export default function App() {
       excerpt: "Exploring the shift towards clean lines and understated luxury in contemporary leatherwear collections.",
       date: "February 05, 2026",
       author: "Hamza Ahmed",
-      image: "https://images.unsplash.com/photo-1520975916090-3105956dac50?auto=format&fit=crop&q=80&w=600",
+      image: "https://picsum.photos/seed/leather-moto/600/400",
       category: "Trends"
     },
     {
@@ -687,7 +721,7 @@ export default function App() {
       excerpt: "How our low MOQ and sampling services help emerging brands enter the premium leather market.",
       date: "January 30, 2026",
       author: "Bilal Ahmed",
-      image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=600",
+      image: "https://picsum.photos/seed/shearling-jacket/600/400",
       category: "Business"
     },
     {
@@ -696,7 +730,7 @@ export default function App() {
       excerpt: "From military utility to cultural rebellion: tracing the evolution of the world's most famous leather garment.",
       date: "January 25, 2026",
       author: "Zain Ahmed",
-      image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&q=80&w=600",
+      image: "https://picsum.photos/seed/brown-bomber/600/400",
       category: "Craftsmanship"
     }
   ];
@@ -704,8 +738,28 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-black selection:text-white overflow-x-hidden">
       <div className="fixed top-0 left-0 right-0 z-[100] pointer-events-none">
+        {/* Announcement Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.5 }}
+          className="bg-black text-white text-center py-2 px-4 pointer-events-auto"
+        >
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em]">
+            Free Samples Available &nbsp;·&nbsp; We Reply Within 2 Hours &nbsp;·&nbsp;
+            <a
+              href="https://wa.me/923001234567?text=Hi%2C%20please%20send%20me%20your%20wholesale%20catalog"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-gray-300 transition-colors ml-1"
+            >
+              WhatsApp Us Now
+            </a>
+          </p>
+        </motion.div>
+
         {/* Top Header */}
-        <motion.header 
+        <motion.header
           initial={{ opacity: 0, y: -100 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 2 }}
@@ -753,9 +807,10 @@ export default function App() {
                   </button>
                 ))}
               </nav>
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={() => setCurrentPage('contact')}
                 className="hidden sm:block bg-black text-white px-8 py-3 rounded-none text-[11px] font-bold tracking-[0.2em] uppercase hover:shadow-2xl hover:shadow-black/20 transition-all"
               >
                 GET STARTED
@@ -857,7 +912,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <main className="pt-0">
+      <main className="pt-32 lg:pt-44">
         {currentPage === 'home' && (
           <>
             {/* Hero Section */}
@@ -885,26 +940,39 @@ export default function App() {
                   className="max-w-4xl"
                 >
                   <span className="inline-block px-4 py-1.5 rounded-none bg-white text-black text-[10px] font-bold tracking-[0.3em] uppercase mb-8">
-                    B2B MANUFACTURING EXCELLENCE
+                    Sialkot, Punjab · Pakistan's Leather Capital
                   </span>
                   <h1 className="text-4xl md:text-7xl font-display font-bold leading-[0.9] tracking-tighter mb-10 uppercase text-white">
                     PREMIUM <br />
                     <span className="text-gray-400 italic">LEATHER</span> <br />
-                    CRAFTSMANSHIP
+                    MANUFACTURER
                   </h1>
-                  <p className="text-xl text-gray-300 mb-12 max-w-lg leading-relaxed font-light">
-                    Direct-from-factory wholesale manufacturing for global fashion brands. 
-                    Uncompromising quality, custom-tailored for your business needs.
+                  <p className="text-xl text-gray-300 mb-4 max-w-lg leading-relaxed font-light">
+                    OEM &amp; wholesale leather jackets, bags &amp; accessories — direct from our factory in Sialkot's export zone to your brand.
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-6">
-                    <motion.button 
+                  <p className="text-sm text-gray-500 mb-12 max-w-lg font-medium uppercase tracking-widest">
+                    Low MOQ · Custom Branding · ISO-Compliant · US / UK / EU Exports
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setCurrentPage('shop')}
-                      className="bg-white text-black px-12 py-6 rounded-none font-bold text-xs uppercase tracking-[0.3em] shadow-2xl transition-all"
+                      className="bg-white text-black px-10 py-5 rounded-none font-bold text-xs uppercase tracking-[0.3em] shadow-2xl transition-all"
                     >
                       Explore Collections
                     </motion.button>
+                    <motion.a
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      href="https://wa.me/923001234567?text=Hi%2C%20please%20send%20me%20your%20wholesale%20PDF%20catalog"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="border border-white text-white px-10 py-5 rounded-none font-bold text-xs uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all flex items-center justify-center gap-3"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                      Download PDF Catalog
+                    </motion.a>
                   </div>
                 </motion.div>
               </div>
@@ -934,6 +1002,35 @@ export default function App() {
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em]">{stat.label}</span>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Badges & Certifications Bar */}
+      <section className="py-12 bg-white border-b border-gray-100">
+        <div className="container mx-auto px-4">
+          <p className="text-center text-[10px] font-bold text-gray-400 uppercase tracking-[0.4em] mb-8">
+            Verified Manufacturer — Sialkot Export Processing Zone, Punjab, Pakistan
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
+            {[
+              { label: "ISO 9001:2015", sub: "Quality Management" },
+              { label: "REACH", sub: "EU Compliance" },
+              { label: "OEKO-TEX®", sub: "Tested for Harmful Substances" },
+              { label: "BSCI", sub: "Social Compliance Audit" },
+              { label: "OEM / ODM", sub: "Private Label Ready" },
+              { label: "Sialkot Chamber", sub: "Registered Exporter" },
+            ].map((cert) => (
+              <div key={cert.label} className="flex flex-col items-center text-center border border-gray-200 px-5 py-4 min-w-[110px] hover:border-black transition-colors group">
+                <span className="text-xs font-bold uppercase tracking-widest text-black group-hover:text-black transition-colors">{cert.label}</span>
+                <span className="text-[9px] text-gray-400 mt-1 uppercase tracking-wide">{cert.sub}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10 text-center">
+            <p className="text-[11px] text-gray-500 font-medium">
+              Exporting premium leather goods to <span className="font-bold text-black">USA · UK · EU · Canada · Australia</span> since 2011
+            </p>
           </div>
         </div>
       </section>
@@ -1133,7 +1230,7 @@ export default function App() {
             >
               <div className="relative aspect-square rounded-none overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1520975916090-3105956dac50?auto=format&fit=crop&q=80&w=1000"
+                  src="https://picsum.photos/seed/leather-moto/800/1000"
                   alt="Craftsmanship"
                   className="w-full h-full object-cover transition-all duration-1000"
                   referrerPolicy="no-referrer"
@@ -1237,12 +1334,16 @@ export default function App() {
                 <div className="absolute -top-6 left-12 w-12 h-12 bg-black text-white rounded-none flex items-center justify-center text-2xl font-serif italic shadow-xl">
                   "
                 </div>
-                <p className="text-gray-600 mb-10 italic leading-relaxed text-lg font-light">
-                  {t.text}
+                <p className="text-gray-600 mb-8 italic leading-relaxed text-base font-light">
+                  "{t.text}"
                 </p>
-                <div className="flex flex-col">
+                <div className="border-t border-gray-100 pt-6 space-y-1">
                   <h4 className="font-bold text-sm uppercase tracking-[0.2em]">{t.name}</h4>
-                  <span className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">Verified Partner</span>
+                  <span className="text-[10px] text-gray-500 block">{t.role} — {t.company}</span>
+                  <div className="flex items-center justify-between pt-2">
+                    <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{t.country}</span>
+                    <span className="px-2 py-0.5 bg-black text-white text-[9px] font-bold uppercase tracking-widest">{t.volume}</span>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -1501,12 +1602,12 @@ export default function App() {
                 {[
                   "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80&w=600",
                   "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?auto=format&fit=crop&q=80&w=600",
-                  "https://images.unsplash.com/photo-1520975916090-3105956dac50?auto=format&fit=crop&q=80&w=600",
-                  "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=600",
-                  "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&q=80&w=600",
+                  "https://picsum.photos/seed/leather-moto/600/400",
+                  "https://picsum.photos/seed/shearling-jacket/600/400",
+                  "https://picsum.photos/seed/brown-bomber/600/400",
                   "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?auto=format&fit=crop&q=80&w=600",
                   "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80&w=600",
-                  "https://images.unsplash.com/photo-1520975916090-3105956dac50?auto=format&fit=crop&q=80&w=600"
+                  "https://picsum.photos/seed/leather-moto/600/400"
                 ].map((img, i) => (
                   <motion.div
                     key={i}
@@ -1609,7 +1710,179 @@ export default function App() {
       )}
 
       {currentPage === 'contact' && (
-        <ComingSoon title="Contact Us" />
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white min-h-screen">
+          {/* Contact Hero */}
+          <section className="py-20 bg-gray-50 border-b border-gray-100">
+            <div className="container mx-auto px-4">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.4em] mb-6 block">Direct Manufacturer</span>
+              <h1 className="text-5xl md:text-7xl font-display font-bold leading-none tracking-tighter uppercase mb-6">
+                GET IN <br /><span className="text-gray-300 italic">TOUCH</span>
+              </h1>
+              <p className="text-lg text-gray-500 max-w-xl font-light leading-relaxed">
+                Request a free sample, wholesale quote, or catalog. Our team responds within 2 business hours.
+              </p>
+            </div>
+          </section>
+
+          <section className="py-24">
+            <div className="container mx-auto px-4">
+              <div className="grid lg:grid-cols-2 gap-20">
+
+                {/* Left: Form */}
+                <div>
+                  <h2 className="text-xl font-bold uppercase tracking-tight mb-10">Send an Enquiry</h2>
+                  <form
+                    className="space-y-8"
+                    onSubmit={(e) => { e.preventDefault(); alert('Message sent! We\'ll reply within 2 hours.'); }}
+                  >
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Full Name *</label>
+                        <input type="text" required className="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition-colors bg-transparent text-sm" placeholder="John Smith" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Email Address *</label>
+                        <input type="email" required className="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition-colors bg-transparent text-sm" placeholder="john@yourbrand.com" />
+                      </div>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Company / Brand</label>
+                        <input type="text" className="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition-colors bg-transparent text-sm" placeholder="Your Brand Ltd." />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Country</label>
+                        <input type="text" className="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition-colors bg-transparent text-sm" placeholder="United States" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Enquiry Type</label>
+                      <select className="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition-colors bg-transparent text-sm">
+                        <option>Wholesale Quote</option>
+                        <option>Free Sample Request</option>
+                        <option>PDF Catalog Request</option>
+                        <option>OEM / Custom Order</option>
+                        <option>General Enquiry</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Message *</label>
+                      <textarea
+                        rows={5}
+                        required
+                        className="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition-colors resize-none bg-transparent text-sm"
+                        placeholder="Tell us about your product needs, quantities, target markets, and any custom requirements..."
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full bg-black text-white py-5 font-bold text-xs uppercase tracking-[0.3em] hover:bg-gray-900 transition-colors"
+                    >
+                      Send Enquiry
+                    </button>
+                    <p className="text-[10px] text-gray-400 text-center uppercase tracking-widest">
+                      We reply within 2 business hours · Mon–Sat, 9am–6pm PKT
+                    </p>
+                  </form>
+                </div>
+
+                {/* Right: Contact Details */}
+                <div className="space-y-10">
+                  <h2 className="text-xl font-bold uppercase tracking-tight">Contact Details</h2>
+
+                  <div className="space-y-8">
+                    <div className="flex gap-5">
+                      <div className="w-10 h-10 bg-black text-white flex items-center justify-center shrink-0">
+                        <MapPin size={18} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Factory Address</p>
+                        <p className="text-sm font-medium">Sialkot Export Processing Zone</p>
+                        <p className="text-sm text-gray-500">Sialkot, Punjab 51310, Pakistan</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-5">
+                      <div className="w-10 h-10 bg-black text-white flex items-center justify-center shrink-0">
+                        <Mail size={18} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Email</p>
+                        <a href="mailto:support@energeticwears.com" className="text-sm font-medium hover:underline">support@energeticwears.com</a>
+                      </div>
+                    </div>
+                    <div className="flex gap-5">
+                      <div className="w-10 h-10 bg-black text-white flex items-center justify-center shrink-0">
+                        <Phone size={18} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Phone / WhatsApp</p>
+                        <a href="tel:+923001234567" className="text-sm font-medium hover:underline">+92 300 1234567</a>
+                        <p className="text-xs text-gray-400 mt-0.5">Available Mon–Sat, 9am–6pm PKT</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-5">
+                      <div className="w-10 h-10 bg-[#25D366] text-white flex items-center justify-center shrink-0">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">WhatsApp Direct</p>
+                        <a
+                          href="https://wa.me/923001234567?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20wholesale%20leather%20products."
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-medium hover:underline"
+                        >
+                          Chat on WhatsApp
+                        </a>
+                        <p className="text-xs text-gray-400 mt-0.5">Fastest response — typically under 30 min</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-5">
+                      <div className="w-10 h-10 bg-black text-white flex items-center justify-center shrink-0">
+                        <Clock size={18} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Response Commitment</p>
+                        <p className="text-sm font-medium">All enquiries answered within 2 hours</p>
+                        <p className="text-xs text-gray-400 mt-0.5">Monday–Saturday · 9:00 AM – 6:00 PM PKT</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick action strip */}
+                  <div className="bg-black text-white p-8 space-y-4">
+                    <p className="text-xs font-bold uppercase tracking-widest text-gray-400">Quick Actions</p>
+                    <a
+                      href="https://wa.me/923001234567?text=Hi%2C%20please%20send%20me%20your%20wholesale%20PDF%20catalog"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between py-3 border-b border-white/10 hover:text-gray-300 transition-colors group"
+                    >
+                      <span className="text-sm font-medium">Download PDF Catalog</span>
+                      <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    </a>
+                    <a
+                      href="https://wa.me/923001234567?text=Hi%2C%20I%27d%20like%20to%20request%20a%20free%20sample"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between py-3 border-b border-white/10 hover:text-gray-300 transition-colors group"
+                    >
+                      <span className="text-sm font-medium">Request a Free Sample</span>
+                      <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    </a>
+                    <button
+                      onClick={() => setCurrentPage('custom-leather-jackets')}
+                      className="flex items-center justify-between py-3 w-full text-left hover:text-gray-300 transition-colors group"
+                    >
+                      <span className="text-sm font-medium">Start a Custom Order</span>
+                      <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </motion.div>
       )}
 
       {secondaryNavLinks.some(link => link.id === currentPage) && !['about', 'blogs', 'custom-leather-jackets', 'shop'].includes(currentPage) && (
@@ -1732,6 +2005,10 @@ export default function App() {
                                   <Star key={i} size={10} className="fill-black text-black" />
                                 ))}
                               </div>
+                            </div>
+                            <div className="flex items-center gap-3 pt-1">
+                              <span className="px-2 py-0.5 bg-black text-white text-[9px] font-bold uppercase tracking-widest">MOQ: {product.moq}</span>
+                              <span className="text-[9px] text-gray-400 font-medium uppercase tracking-wide">{product.leadTime}</span>
                             </div>
                           </div>
                         </motion.div>
@@ -2118,12 +2395,38 @@ export default function App() {
         </div>
       </footer>
 
+      {/* WhatsApp Floating Button */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 3 }}
+        className="fixed bottom-8 left-8 z-[150] flex flex-col items-start gap-2"
+      >
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 3.5 }}
+          className="bg-black text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 whitespace-nowrap shadow-lg"
+        >
+          Reply within 2 hours
+        </motion.div>
+        <a
+          href="https://wa.me/923001234567?text=Hi%2C%20I%27m%20interested%20in%20wholesale%20leather%20jackets.%20Can%20you%20share%20your%20catalog%3F"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-14 h-14 bg-[#25D366] text-white rounded-none shadow-2xl flex items-center justify-center hover:bg-[#1ebe5d] transition-colors"
+          aria-label="Chat on WhatsApp"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+      </motion.div>
+
       {/* Back to Top */}
       <AnimatePresence>
         {selectedProduct && (
-          <ProductDetail 
-            product={selectedProduct} 
-            onClose={() => setSelectedProduct(null)} 
+          <ProductDetail
+            product={selectedProduct}
+            onClose={() => setSelectedProduct(null)}
             onSelectProduct={(p) => setSelectedProduct(p)}
           />
         )}
